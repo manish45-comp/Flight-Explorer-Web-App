@@ -1,0 +1,24 @@
+/* width */
+.sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+
+.sidebar {
+  z-index: 99999;
+}
+
+.sidebar:hover::-webkit-scrollbar-thumb {
+  display: block;
+}
+::-webkit-scrollbar-thumb {
+  background: #3a3a3a;
+  border-radius: 99px;
+  display: none;
+}

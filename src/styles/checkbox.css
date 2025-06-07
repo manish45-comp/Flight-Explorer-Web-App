@@ -1,0 +1,33 @@
+.checkbox-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  display: none;
+}
+
+.checkbox-wrapper .checkmark {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.checkbox-wrapper .checkbox-custom {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  background-color: #bebebe;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+.checkbox-wrapper input[type="checkbox"]:checked + .checkbox-custom {
+  background-color: green;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked + .checkbox-custom .checkmark {
+  opacity: 1;
+}
