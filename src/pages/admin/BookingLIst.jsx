@@ -1,23 +1,31 @@
 import { useState, useMemo } from "react";
 
-function BookingList({ bookings }) {
+function BookingList({ bookings = [] }) {
   const [search, setSearch] = useState("");
   const [airlineFilter, setAirlineFilter] = useState("");
 
   const airlines = useMemo(() => {
-    return [...new Set(bookings.map((b) => b.airline))];
+    return Array.isArray(bookings)
+      ? [...new Set(bookings.map((b) => b.airline))]
+      : [];
   }, [bookings]);
 
-  const filteredBookings = bookings.filter((booking) => {
-    const passengerName = `${booking.passenger?.firstName ?? ""} ${
-      booking.passenger?.lastName ?? ""
-    }`.toLowerCase();
-    const matchesSearch = passengerName.includes(search.toLowerCase());
-    const matchesAirline = airlineFilter
-      ? booking.airline === airlineFilter
-      : true;
-    return matchesSearch && matchesAirline;
-  });
+  const filteredBookings = useMemo(() => {
+    if (!Array.isArray(bookings)) return [];
+
+    return bookings.filter((booking) => {
+      const passengerName = `${booking.passenger?.firstName ?? ""} ${
+        booking.passenger?.lastName ?? ""
+      }`.toLowerCase();
+
+      const matchesSearch = passengerName.includes(search.toLowerCase());
+      const matchesAirline = airlineFilter
+        ? booking.airline === airlineFilter
+        : true;
+
+      return matchesSearch && matchesAirline;
+    });
+  }, [bookings, search, airlineFilter]);
 
   return (
     <div className="bg-white p-6 rounded-md shadow-lg">

@@ -1,14 +1,3 @@
-export const getFromLocalStorage = (key) => {
-  if (typeof window === "undefined") return null;
-  return localStorage.getItem(key);
-};
-
-// Sets a value in localStorage
-export const setToLocalStorage = (key, value) => {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(key, value);
-};
-
 export const addRippleEffect = (button, event) => {
   if (button) {
     const rect = button.getBoundingClientRect();

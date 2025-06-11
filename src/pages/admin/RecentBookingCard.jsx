@@ -10,13 +10,25 @@ import { useEffect, useState } from "react";
 
 const RecentBookingCard = () => {
   const [latestbooking, setLatestBooking] = useState({});
+
   useEffect(() => {
-    setLatestBooking(JSON.parse(localStorage?.getItem("latestBooking") || {}));
+    try {
+      const stored = localStorage.getItem("latestBooking");
+      if (stored) {
+        setLatestBooking(JSON.parse(stored));
+      } else {
+        setLatestBooking(null);
+      }
+    } catch (error) {
+      console.error("Failed to parse latestBooking from localStorage:", error);
+      setLatestBooking(null);
+    }
   }, []);
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-xl border border-gray-200 mb-6">
       <p className="text-xl font-bold text-gray-800 mb-5">Recent Booking</p>
-      {latestbooking ? (
+      {latestbooking && latestbooking.bookingId ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-y-3 gap-x-6 text-sm">
           <div className="flex items-center gap-2">
             <span className="text-gray-500">
