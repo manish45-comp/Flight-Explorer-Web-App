@@ -43,3 +43,14 @@ export const converToNormalTime = (isoTime) => {
 
   return readableTime;
 };
+
+export const getTimeSlot = (departureTime) => {
+  const istOffsetMs = 5.5 * 60 * 60 * 1000;
+  const istDate = new Date(new Date(departureTime).getTime() + istOffsetMs);
+  const hour = istDate.getHours();
+
+  if (hour >= 5 && hour < 12) return "Morning";
+  if (hour >= 12 && hour < 17) return "Afternoon";
+  if (hour >= 17 && hour < 20) return "Evening";
+  if (hour >= 20 || hour < 5) return "Night";
+};

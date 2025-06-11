@@ -24,7 +24,9 @@ const UserDashboard = () => {
   const [currentDate, setCurrentDate] = useState("");
   const [searchData, setSearchData] = useState(null);
 
-  const { flights: allFlights } = useSelector((state) => state.flights);
+  const { flights: allFlights, isLoading } = useSelector(
+    (state) => state.flights
+  );
 
   const [filters, setFilters] = useState({
     timeslot: "",
@@ -36,27 +38,26 @@ const UserDashboard = () => {
 
   useEffect(() => {
     setCurrentDate(getCurrentDate());
-    dispatch(fetchFlights());
-  }, [dispatch]);
+  }, []);
 
   const handleSearch = (data) => {
     setSearchData(data);
+    dispatch(fetchFlights());
   };
 
   useEffect(() => {
     if (!searchData) return;
-
     let results = [...allFlights];
 
     results = results.filter((flight) => {
-      const matchesFrom = flight.from === searchData.cityFrom;
-      const matchesTo = flight.to === searchData.cityTo;
-      const matchesTripType = flight.type === searchData.tripWay;
+      const matchFrom = flight.from === searchData.from;
+      const matchTo = flight.to === searchData.to;
+      const matchType = flight.type === searchData.type;
       const matchesDate = searchData.travelDate
         ? flight.travelDate === searchData.travelDate
         : true;
 
-      return matchesFrom && matchesTo && matchesTripType && matchesDate;
+      return matchFrom && matchTo && matchType && matchesDate;
     });
 
     if (filters.airlines.length > 0) {
@@ -78,10 +79,17 @@ const UserDashboard = () => {
         evening: [17, 20],
         night: [20, 24],
       };
+
       const [start, end] = timeRanges[filters.timeslot];
+
       results = results.filter((flight) => {
-        const hour = new Date(flight.departureTime).getHours();
-        return hour >= start && hour < end;
+        const utcDate = new Date(flight.departureTime);
+
+        const istOffsetMs = 5.5 * 60 * 60 * 1000;
+        const istDate = new Date(utcDate.getTime() + istOffsetMs);
+
+        const hourIST = istDate.getHours();
+        return hourIST >= start && hourIST < end;
       });
     }
 
@@ -106,12 +114,12 @@ const UserDashboard = () => {
   return (
     <div className="container mx-auto min-h-screen py-10 px-4 sm:px-6 lg:px-8 bg-gray-100">
       <div className="flex items-center justify-end my-2 ">
-        <buttom
+        <button
           onClick={() => dispatch(logout())}
           className="bg-red-300 p-2 rounded-md text-red-700 font-semibold hover:bg-red-200 cursor-pointer flex items-center justify-center gap-1"
         >
           Logout <LogOut />
-        </buttom>
+        </button>
       </div>
       <SearchForm
         register={register}
@@ -128,13 +136,20 @@ const UserDashboard = () => {
           handleCheckboxChange={handleCheckboxChange}
         />
         <div className="flights flex-grow bg-white rounded-md shadow-lg p-5">
-          {filteredFlights.length > 0 ? (
+          {isLoading ? (
+            <div className="animate-pulse h-100 bg-gray-100 rounded-2xl flex items-center justify-center">
+              <div class="loader"></div>
+            </div>
+          ) : filteredFlights.length > 0 ? (
             <FlightsList
               filteredFlights={filteredFlights}
+              isLoading={isLoading}
               handleBook={handleBook}
             />
           ) : (
-            <p className="text-center text-gray-500 mt-6">No flights found</p>
+            <p className="text-center text-gray-500 mt-6">
+              No flights available
+            </p>
           )}
         </div>
       </div>

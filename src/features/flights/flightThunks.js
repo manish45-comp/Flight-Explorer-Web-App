@@ -1,37 +1,57 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import {
-  addFlight,
-  updateFlight,
-  getAllFlights,
-  deleteFlight,
-} from "../../db/flightDB";
+import axios from "axios";
 
+// Using hardcoded for now — once env works, switch back to import.meta.env
+const BIN_ID = import.meta.env.VITE_BIN_ID;
+const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+
+const headers = {
+  "X-Master-Key":
+    "$2a$10$n5T3OyMe4qBIZgmQHDH1Me541ZhwHcxfzZMXy05/4Pg0Fq57arjcW",
+  "Content-Type": "application/json",
+};
+
+// ✅ Fetch all flights
 export const fetchFlights = createAsyncThunk(
   "flights/fetchFlights",
   async () => {
-    const flights = await getAllFlights();
-    return flights;
+    const response = await axios.get(`${BASE_URL}/latest`, { headers });
+    return response.data.record;
   }
 );
 
-export const saveFlight = createAsyncThunk(
-  "flights/saveFlight",
-  async (formData, { getState }) => {
-    if (formData.id) {
-      await updateFlight(formData);
-      return { type: "update", flight: formData };
-    } else {
-      const newFlight = { ...formData, id: `FL${Date.now()}` };
-      await addFlight(newFlight);
-      return { type: "add", flight: newFlight };
-    }
+// ✅ Add a new flight
+export const addFlight = createAsyncThunk(
+  "flights/addFlight",
+  async (newFlight, { getState }) => {
+    const { flights } = getState().flights;
+    const updatedFlights = [...flights, newFlight];
+
+    await axios.put(BASE_URL, updatedFlights, { headers });
+    return newFlight;
   }
 );
 
-export const removeFlight = createAsyncThunk(
+// ✅ Update existing flight
+export const updateFlight = createAsyncThunk(
+  "flights/updateFlight",
+  async (updatedFlight, { getState }) => {
+    const { flights } = getState().flights;
+    const updatedFlights = flights.map((flight) =>
+      flight.id === updatedFlight.id ? updatedFlight : flight
+    );
+    await axios.put(BASE_URL, updatedFlights, { headers });
+    return updatedFlight;
+  }
+);
+
+// ✅ Delete a flight
+export const deleteFlight = createAsyncThunk(
   "flights/deleteFlight",
-  async (id) => {
-    await deleteFlight(id);
-    return id;
+  async (flightId, { getState }) => {
+    const { flights } = getState().flights;
+    const updatedFlights = flights.filter((flight) => flight.id !== flightId);
+    await axios.put(BASE_URL, updatedFlights, { headers });
+    return flightId;
   }
 );

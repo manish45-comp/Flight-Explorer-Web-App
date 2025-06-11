@@ -1,7 +1,7 @@
 const FiltersPanel = (props) => {
   const { filters, setFilters, handleCheckboxChange } = props;
   return (
-    <div className="filters lg:min-w-[250px] border border-gray-200 p-4 rounded-md bg-white shadow-lg mb-6 lg:mb-0">
+    <div className="filters lg:min-w-[250px] border border-gray-200 p-4 rounded-md bg-white shadow-lg mb-6 lg:mb-0 h-min">
       <div className="flex items-center justify-between mb-6">
         <p className="font-semibold text-lg">Filters</p>
         <button

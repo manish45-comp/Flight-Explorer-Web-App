@@ -10,7 +10,7 @@ const SearchForm = (props) => {
       className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4 p-5 bg-white rounded-lg shadow-lg mb-8"
     >
       <select
-        {...register("tripWay", { required: "Trip type is required" })}
+        {...register("type", { required: "Trip type is required" })}
         className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
       >
         <option value="">Trip Type</option>
@@ -19,7 +19,7 @@ const SearchForm = (props) => {
         <option value="multi-city">Multi City</option>
       </select>
       <select
-        {...register("cityFrom", {
+        {...register("from", {
           required: "Origin city is required",
         })}
         className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"
@@ -40,7 +40,7 @@ const SearchForm = (props) => {
         />
       </div>
       <select
-        {...register("cityTo", {
+        {...register("to", {
           required: "Destination city is required",
         })}
         className="w-full py-2 px-3 rounded-lg bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-700"

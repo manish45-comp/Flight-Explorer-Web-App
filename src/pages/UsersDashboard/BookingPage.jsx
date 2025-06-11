@@ -187,9 +187,9 @@ const BookingPage = () => {
             <div className="mt-6 p-4 bg-blue-50 rounded-lg border border-blue-100 text-gray-800">
               <p className="text-lg mb-2">
                 <span className="font-semibold text-blue-700">Flight:</span>{" "}
-                {flight.airline}{" "}
+                {flight?.airline}{" "}
                 <span className="font-mono text-sm text-blue-600">
-                  ({flight.flightNumber})
+                  ({flight?.flightNumber})
                 </span>
               </p>
               <p className="text-lg mb-3">
@@ -199,11 +199,11 @@ const BookingPage = () => {
                 </span>{" "}
                 →{" "}
                 <span className="font-medium bg-blue-100 px-2 py-0.5 rounded-md">
-                  {flight.to}
+                  {flight?.to}
                 </span>
               </p>
               <p className="text-3xl font-extrabold text-blue-800 mt-4">
-                Total Price: ₹{flight.price}
+                Total Price: ₹{flight?.price}
               </p>
             </div>
             <button

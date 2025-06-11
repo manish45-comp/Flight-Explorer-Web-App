@@ -4,9 +4,10 @@ import { XCircle, PencilLine, Trash2 } from "lucide-react";
 
 import FlightDetailsForm from "./FlightDetailsForm";
 import {
+  addFlight,
+  deleteFlight,
   fetchFlights,
-  saveFlight,
-  removeFlight,
+  updateFlight,
 } from "../../features/flights/flightThunks";
 import toast from "react-hot-toast";
 
@@ -45,25 +46,38 @@ const FlightManager = () => {
     setShowFlightForm(true);
   };
 
-  const handleSaveFlight = async (formData) => {
-    await dispatch(saveFlight(formData));
-    formData.id
-      ? toast.success("Flight updated successfully!")
-      : toast.success("Flight added successfully!");
-    setShowFlightForm(false);
-    setFlightToEdit(null);
-  };
-
-  const handleDeleteFlight = async (id) => {
-    if (window.confirm("Are you sure you want to delete this flight?")) {
-      await dispatch(removeFlight(id));
-      toast.success("Flight deleted successfully!");
-    }
-  };
-
   const handleCancelForm = () => {
     setShowFlightForm(false);
     setFlightToEdit(null);
+  };
+
+  const handleSaveFlight = (flightData) => {
+    if (flightToEdit) {
+      dispatch(updateFlight(flightData))
+        .unwrap()
+        .then(() => {
+          toast.success("Flight updated successfully!");
+          setShowFlightForm(false);
+          setFlightToEdit(null);
+        })
+        .catch(() => toast.error("Failed to update flight."));
+    } else {
+      dispatch(addFlight({ ...flightData, id: Date.now() }))
+        .unwrap()
+        .then(() => {
+          toast.success("Flight added successfully!");
+          setShowFlightForm(false);
+        })
+        .catch(() => toast.error("Failed to add flight."));
+    }
+  };
+  const handleDeleteFlight = (flightId) => {
+    if (confirm("Are you sure you want to delete this flight?")) {
+      dispatch(deleteFlight(flightId))
+        .unwrap()
+        .then(() => toast.success("Flight deleted successfully!"))
+        .catch(() => toast.error("Failed to delete flight."));
+    }
   };
 
   return (

@@ -1,6 +1,10 @@
-// src/features/flights/flightSlice.js
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchFlights, saveFlight, removeFlight } from "./flightThunks";
+import {
+  addFlight,
+  deleteFlight,
+  fetchFlights,
+  updateFlight,
+} from "./flightThunks";
 
 const initialState = {
   flights: [],
@@ -26,19 +30,16 @@ const flightSlice = createSlice({
         state.isLoading = false;
         state.isError = action.error.message;
       })
-
-      .addCase(saveFlight.fulfilled, (state, action) => {
-        const { type, flight } = action.payload;
-        if (type === "update") {
-          state.flights = state.flights.map((f) =>
-            f.id === flight.id ? flight : f
-          );
-        } else {
-          state.flights.push(flight);
-        }
+      .addCase(addFlight.fulfilled, (state, action) => {
+        state.flights.push(action.payload);
       })
-
-      .addCase(removeFlight.fulfilled, (state, action) => {
+      .addCase(updateFlight.fulfilled, (state, action) => {
+        const index = state.flights.findIndex(
+          (f) => f.id === action.payload.id
+        );
+        if (index !== -1) state.flights[index] = action.payload;
+      })
+      .addCase(deleteFlight.fulfilled, (state, action) => {
         state.flights = state.flights.filter((f) => f.id !== action.payload);
       });
   },
