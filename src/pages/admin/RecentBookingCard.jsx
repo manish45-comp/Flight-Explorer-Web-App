@@ -11,7 +11,7 @@ import { useEffect, useState } from "react";
 const RecentBookingCard = () => {
   const [latestbooking, setLatestBooking] = useState({});
   useEffect(() => {
-    setLatestBooking(JSON.parse(localStorage.getItem("latestBooking") || {}));
+    setLatestBooking(JSON.parse(localStorage?.getItem("latestBooking") || {}));
   }, []);
   return (
     <div className="bg-white p-6 rounded-lg shadow-xl border border-gray-200 mb-6">
