@@ -102,7 +102,7 @@ const FlightManager = () => {
                 <p className="text-center text-gray-600 py-10">
                   Loading flights...
                 </p>
-              ) : paginatedFlights.length > 0 ? (
+              ) : paginatedFlights?.length > 0 ? (
                 <table className="w-full text-sm text-left text-gray-700">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-100 border-b">
                     <tr>
@@ -115,7 +115,7 @@ const FlightManager = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {paginatedFlights.map((flight) => {
+                    {paginatedFlights?.map((flight) => {
                       const departureTime = flight.departureTime
                         ? new Date(flight.departureTime).toLocaleTimeString(
                             [],

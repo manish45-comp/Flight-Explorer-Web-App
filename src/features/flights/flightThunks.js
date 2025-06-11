@@ -5,11 +5,9 @@ const API_KEY = import.meta.env.VITE_API_KEY;
 const BIN_ID = import.meta.env.VITE_BIN_ID;
 const BASE_URL = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
 
-console.log("API KEY:", import.meta.env.VITE_API_KEY);
-console.log("Length:", import.meta.env.VITE_API_KEY.length);
-
 const headers = {
-  "X-Master-Key": API_KEY,
+  "X-Master-Key":
+    "$2a$10$n5T3OyMe4qBIZgmQHDH1Me541ZhwHcxfzZMXy05/4Pg0Fq57arjcW",
   "Content-Type": "application/json",
 };
 
