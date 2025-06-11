@@ -12,7 +12,7 @@ const AdminDashboard = () => {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    setBookings(JSON.parse(localStorage.getItem("bookingHistory") || "[]"));
+    setBookings(JSON.parse(localStorage?.getItem("bookingHistory") || "[]"));
   }, []);
 
   return (
